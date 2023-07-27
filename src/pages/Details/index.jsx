@@ -42,7 +42,7 @@ import { ButtonText } from '../../components/ButtonText';
         </Content>
       </main>
     </Container>
-   )
+   );
   }
 
 
