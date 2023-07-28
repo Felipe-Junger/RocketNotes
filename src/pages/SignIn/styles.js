@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import backgroundImg from '../../assets/background-office.png';
 
 export const Container = styled.div `
     height: 100vh;
@@ -8,7 +9,7 @@ export const Container = styled.div `
 `;
 
 export const Form = styled.form`
-    padding: 0 136px;
+    padding: 0 90px;
 
     display: flex;
     flex-direction: column;
@@ -18,18 +19,18 @@ export const Form = styled.form`
     text-align: center;
 
     > h1 {
-        font-size: 48px;
+        font-size: 30px;
         color: ${({ theme }) => theme.COLORS.ORANGE};
     }
 
     > h2 {
-        font-size: 24px;
+        font-size: 20px;
         margin-top: 84px;
         margin-bottom: 24px;
     }
 
     > p {
-        font-size: 14px;
+        font-size: 10px;
         color: ${({ theme }) => theme.COLORS.GRAY_100};
     }
 
@@ -37,4 +38,10 @@ export const Form = styled.form`
         margin-top: 124px;
         color: ${({ theme }) => theme.COLORS.ORANGE};
     }
+`;
+
+export const Background = styled.div`
+    flex: 1;
+    background: url(${backgroundImg}) no-repeat center center;
+    background-size: cover;
 `;
