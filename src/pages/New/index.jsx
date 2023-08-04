@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
@@ -45,6 +43,20 @@ export function New() {
     }
 
     async function handleNewNote(){
+
+        if(!title){
+            return alert("Digite o título da nota");
+        }
+
+        if(newLink){
+            return alert("Você deixou um link no campo para adicionar, mas não clicou em adicionar.");
+        }
+
+
+        if(newTag) {
+            return alert("Você deixou uma tag no campo para adicionar, mas não clicou em adicionar.");
+        }
+       
         await api.post("/notes", {
             title,
             description,
