@@ -12,9 +12,26 @@ import { Section }  from '../../components/Section';
 import { ButtonText }  from '../../components/ButtonText';
 
 export function Home() {
+    const [search, setSearch] = useState("");
     const [tags, setTags] = useState([]);
+    const [tagsSelectd, setTagsSelected] = useState([]);
+    const [notes, setNotes] = useState([]);
 
-    
+    function handleTagSelected(tagName){
+        if(tagName === "all"){
+            return setTagsSelected([]);
+        }
+
+        const alreadySelected = tagsSelectd.includes(tagName);
+
+        if(alreadySelected){
+            const filteredTags = tagsSelectd.filter(tag => tag !== tagName);
+            setTagsSelected(filteredTags);
+
+        } else{
+            setTagsSelected(prevState => [...prevState, tagName]);
+        }        
+    }
 
     useEffect(() => {
         async function fetchTags(){
@@ -24,6 +41,15 @@ export function Home() {
 
         fetchTags();
     }, []);
+
+    useEffect(() => {
+        async function fetchNotes(){
+            const response = await api.get(`/notes?title=${search}&tags={tagsSelected}`);
+            setNotes(response.data);
+        }
+
+        fetchNotes();
+    }, [tagsSelectd, search]);
 
     return(
         <Container>
@@ -36,14 +62,18 @@ export function Home() {
             <Menu>
                 <li><ButtonText 
                     title="Todos"
-                    isActive 
+                    onClick={() => handleTagSelected("all")}
+                    isActive={tagsSelectd.length === 0} 
                 />
                 </li>
                 {
-                    tags && tags.map(tag => (
+                    tags?.map(tag => (
                     <li key={String(tag.id)}>
                         <ButtonText 
                             title={tag.name} 
+                            onClick={() => handleTagSelected(tag.name)}
+                            isActive={tagsSelectd.includes(tag.name)} 
+
                         />
                     </li>
                     ))
@@ -51,20 +81,22 @@ export function Home() {
             </Menu>
 
             <Search>
-                <Input placeholder="Pesquisar pelo título" />
+                <Input 
+                    placeholder="Pesquisar pelo título" 
+                    onChange={() => setSearch(e.target.value)}
+                />
             </Search>
 
             <Content>
                 <Section title="Minhas notas">
-                    <Note data={{ 
-                        title: 'React', 
-                        tags: [
-                            {id: '1', name: 'react'},
-                            {id: '2', name: 'rocketseat'}
-                            ]
-                        }}
+                {
+                    notes.map(note => (
+                        <Note 
+                            key={String(note.id)}
+                            data={note}
                         />
-
+                    ))
+                }    
                 </Section>
             </Content>
 
